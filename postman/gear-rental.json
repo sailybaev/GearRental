@@ -1,0 +1,233 @@
+{
+  "info": {
+    "_postman_id": "gear-rental-api-collection",
+    "name": "Gear Rental API",
+    "description": "Complete API collection for the Gear Rental platform",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "refresh_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/auth/register/", "host": ["{{base_url}}"], "path": ["api", "auth", "register", ""] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"johndoe\",\n  \"email\": \"johndoe@example.com\",\n  \"password\": \"securepass123\",\n  \"password_confirm\": \"securepass123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login (Obtain JWT)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.access) { pm.collectionVariables.set('access_token', res.access); }",
+                  "if (res.refresh) { pm.collectionVariables.set('refresh_token', res.refresh); }"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/auth/login/", "host": ["{{base_url}}"], "path": ["api", "auth", "login", ""] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"johndoe\",\n  \"password\": \"securepass123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/api/auth/logout/", "host": ["{{base_url}}"], "path": ["api", "auth", "logout", ""] },
+            "body": { "mode": "raw", "raw": "{}" }
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.access) { pm.collectionVariables.set('access_token', res.access); }"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/auth/token/refresh/", "host": ["{{base_url}}"], "path": ["api", "auth", "token", "refresh", ""] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh\": \"{{refresh_token}}\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Equipment",
+      "item": [
+        {
+          "name": "List Equipment",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/equipment/?category=cameras&min_price=10&max_price=500&is_available=true",
+              "host": ["{{base_url}}"],
+              "path": ["api", "equipment", ""],
+              "query": [
+                { "key": "category", "value": "cameras", "description": "Filter by category slug" },
+                { "key": "min_price", "value": "10", "description": "Minimum daily rate" },
+                { "key": "max_price", "value": "500", "description": "Maximum daily rate" },
+                { "key": "is_available", "value": "true", "description": "Filter by availability" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Equipment by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{base_url}}/api/equipment/1/", "host": ["{{base_url}}"], "path": ["api", "equipment", "1", ""] }
+          }
+        },
+        {
+          "name": "Create Equipment (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/api/equipment/", "host": ["{{base_url}}"], "path": ["api", "equipment", ""] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Sony Alpha A7 IV\",\n  \"description\": \"Full-frame mirrorless camera with 33MP sensor\",\n  \"category\": 1,\n  \"daily_rate\": \"75.00\",\n  \"is_available\": true\n}"
+            }
+          }
+        },
+        {
+          "name": "Update Equipment (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/api/equipment/1/", "host": ["{{base_url}}"], "path": ["api", "equipment", "1", ""] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Sony Alpha A7 IV (Updated)\",\n  \"description\": \"Full-frame mirrorless camera with 33MP sensor, updated listing\",\n  \"category\": 1,\n  \"daily_rate\": \"80.00\",\n  \"is_available\": true\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Equipment (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/api/equipment/1/", "host": ["{{base_url}}"], "path": ["api", "equipment", "1", ""] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Bookings",
+      "item": [
+        {
+          "name": "Check Availability",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/api/bookings/check-availability/", "host": ["{{base_url}}"], "path": ["api", "bookings", "check-availability", ""] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"equipment_id\": 1,\n  \"start_date\": \"2026-05-01\",\n  \"end_date\": \"2026-05-05\"\n}"
+            }
+          }
+        },
+        {
+          "name": "List My Bookings",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/api/bookings/", "host": ["{{base_url}}"], "path": ["api", "bookings", ""] }
+          }
+        },
+        {
+          "name": "Create Booking",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/api/bookings/", "host": ["{{base_url}}"], "path": ["api", "bookings", ""] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"equipment\": 1,\n  \"start_date\": \"2026-05-01\",\n  \"end_date\": \"2026-05-05\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Cancel Booking",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/api/bookings/1/cancel/", "host": ["{{base_url}}"], "path": ["api", "bookings", "1", "cancel", ""] },
+            "body": { "mode": "raw", "raw": "{}" }
+          }
+        }
+      ]
+    }
+  ]
+}
