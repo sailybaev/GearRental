@@ -3,8 +3,6 @@
 .env.*
 !.env.example
 
-DECISIONS.md
-STRUCTURE.md
 
 # ─── Python ─────────────────────────────────────────────────
 __pycache__/
