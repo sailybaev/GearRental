@@ -11,173 +11,138 @@ import { Equipment } from '../../core/interfaces/equipment.interface';
   selector: 'app-equipment-detail',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
+  styleUrls: ['./equipment-detail.component.css'],
   template: `
-    <div class="min-h-screen bg-white">
-
+    <div class="page">
       @if (loading) {
-        <div class="max-w-screen-xl mx-auto px-6 py-16 grid grid-cols-1 lg:grid-cols-2 gap-12">
-          <div class="aspect-[4/3] bg-gray-100 animate-pulse"></div>
-          <div class="space-y-4 py-4">
-            <div class="h-2.5 bg-gray-100 animate-pulse w-1/4"></div>
-            <div class="h-7 bg-gray-100 animate-pulse w-4/5"></div>
-            <div class="h-5 bg-gray-100 animate-pulse w-1/3 mt-2"></div>
+        <div class="container-xl">
+          <div class="skeleton-layout">
+            <div class="skeleton skeleton-img"></div>
+            <div style="padding-top:1rem">
+              <div class="skeleton skeleton-line" style="width:25%"></div>
+              <div class="skeleton skeleton-line" style="width:80%;height:28px;margin-top:0.5rem"></div>
+              <div class="skeleton skeleton-line" style="width:33%;height:20px;margin-top:0.5rem"></div>
+            </div>
           </div>
         </div>
       }
 
       @if (error && !loading) {
-        <div class="max-w-screen-xl mx-auto px-6 py-40 text-center">
-          <p class="text-[11px] tracking-label uppercase text-gray-300 mb-4">Not found</p>
-          <a routerLink="/catalog" class="text-xs tracking-label uppercase border-b border-black pb-0.5">← Catalog</a>
+        <div class="container-xl">
+          <div class="error-state">
+            <p class="error-label">Not found</p>
+            <a routerLink="/catalog" class="back-link">← Catalog</a>
+          </div>
         </div>
       }
 
       @if (!loading && equipment) {
-        <!-- Breadcrumb -->
-        <div class="border-b border-gray-100">
-          <div class="max-w-screen-xl mx-auto px-6 py-2.5">
-            <nav class="flex items-center gap-2 text-[11px] text-gray-400 tracking-label uppercase">
-              <a routerLink="/catalog" class="hover:text-black transition-colors">Catalog</a>
-              <span class="text-gray-200">/</span>
-              <span class="hover:text-black transition-colors cursor-pointer">{{ equipment.category_detail?.name }}</span>
-              <span class="text-gray-200">/</span>
-              <span class="text-black truncate max-w-[200px]">{{ equipment.name }}</span>
+        <div class="breadcrumb">
+          <div class="container-xl">
+            <nav class="breadcrumb-inner">
+              <a routerLink="/catalog">Catalog</a>
+              <span class="breadcrumb-sep">/</span>
+              <span>{{ equipment.category_detail?.name }}</span>
+              <span class="breadcrumb-sep">/</span>
+              <span class="breadcrumb-current">{{ equipment.name }}</span>
             </nav>
           </div>
         </div>
 
-        <!-- Main layout -->
-        <div class="max-w-screen-xl mx-auto px-6 py-8">
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 xl:gap-16">
-
-            <!-- LEFT: Image -->
+        <div class="container-xl">
+          <div class="detail-grid">
+            <!-- Image -->
             <div>
-              <div class="aspect-[3/4] overflow-hidden bg-gray-50">
+              <div class="product-image">
                 @if (equipment.image) {
-                  <img [src]="equipment.image" [alt]="equipment.name"
-                       class="w-full h-full object-cover" />
+                  <img [src]="equipment.image" [alt]="equipment.name" />
                 } @else {
-                  <div class="w-full h-full flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <div class="image-placeholder">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                   </div>
                 }
               </div>
-
-              <!-- Description below image -->
-              <div class="mt-6 pt-6 border-t border-gray-100">
-                <p class="text-[10px] tracking-label uppercase text-gray-400 mb-3">About</p>
-                <p class="text-sm text-gray-500 leading-relaxed">{{ equipment.description }}</p>
+              <div class="about-section">
+                <p class="label">About</p>
+                <p class="about-text">{{ equipment.description }}</p>
               </div>
             </div>
 
-            <!-- RIGHT: Info + Booking -->
-            <div class="flex flex-col">
-              <!-- Header -->
-              <div class="mb-6">
-                <div class="flex items-center justify-between mb-2">
-                  <p class="text-[10px] tracking-label uppercase text-gray-400">
-                    {{ equipment.category_detail?.name }}
-                  </p>
-                  <span [class]="equipment.is_available
-                    ? 'flex items-center gap-1.5 text-[10px] tracking-label uppercase text-emerald-600'
-                    : 'flex items-center gap-1.5 text-[10px] tracking-label uppercase text-gray-300'">
-                    <span [class]="equipment.is_available ? 'w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block' : 'w-1.5 h-1.5 rounded-full bg-gray-300 inline-block'"></span>
+            <!-- Info -->
+            <div class="product-info">
+              <div class="product-header">
+                <div class="product-meta">
+                  <p class="label">{{ equipment.category_detail?.name }}</p>
+                  <span class="avail-indicator" [class.available]="equipment.is_available" [class.unavailable]="!equipment.is_available">
+                    <span class="dot" [class.dot-green]="equipment.is_available" [class.dot-gray]="!equipment.is_available"></span>
                     {{ equipment.is_available ? 'Available' : 'Unavailable' }}
                   </span>
                 </div>
-
-                <h1 class="text-3xl font-bold uppercase tracking-tight leading-tight mb-4">
-                  {{ equipment.name }}
-                </h1>
-
-                <div class="flex items-baseline gap-1.5">
-                  <span class="text-3xl font-semibold tracking-tight">
-                    ₸{{ equipment.daily_rate | number:'1.0-0' }}
-                  </span>
-                  <span class="text-sm text-gray-400">/ day</span>
+                <h1 class="product-name">{{ equipment.name }}</h1>
+                <div class="product-price">
+                  <span class="price-value">₸{{ equipment.daily_rate | number:'1.0-0' }}</span>
+                  <span class="price-unit">/ day</span>
                 </div>
               </div>
 
-              <!-- Divider -->
-              <div class="border-t border-gray-100 my-6"></div>
+              <hr class="divider" />
 
-              <!-- Booking form -->
-              <div class="flex-1">
-                <p class="text-[10px] tracking-label uppercase text-gray-400 mb-4">Rental Period</p>
-
-                <div class="grid grid-cols-2 gap-4 mb-5">
+              <div class="booking-section">
+                <p class="section-label">Rental Period</p>
+                <div class="date-grid">
                   <div>
-                    <label class="block text-[10px] tracking-label uppercase text-gray-400 mb-2">From</label>
-                    <input type="date" [(ngModel)]="startDate" [min]="today"
-                           class="w-full border-b border-gray-200 focus:border-black outline-none pb-2 text-sm bg-transparent transition-colors" />
+                    <label class="form-label">From</label>
+                    <input type="date" [(ngModel)]="startDate" [min]="today" class="date-input" />
                   </div>
                   <div>
-                    <label class="block text-[10px] tracking-label uppercase text-gray-400 mb-2">To</label>
-                    <input type="date" [(ngModel)]="endDate" [min]="startDate || today"
-                           class="w-full border-b border-gray-200 focus:border-black outline-none pb-2 text-sm bg-transparent transition-colors" />
+                    <label class="form-label">To</label>
+                    <input type="date" [(ngModel)]="endDate" [min]="startDate || today" class="date-input" />
                   </div>
                 </div>
 
-                <!-- Duration + total -->
                 @if (getDays() > 0) {
-                  <div class="bg-gray-50 px-4 py-3 mb-5">
-                    <div class="flex items-center justify-between text-sm">
-                      <span class="text-gray-500">
-                        {{ getDays() }} {{ getDays() === 1 ? 'day' : 'days' }}
-                        × ₸{{ equipment.daily_rate | number:'1.0-0' }}
-                      </span>
-                      <span class="font-semibold">₸{{ getTotal() | number:'1.0-0' }}</span>
-                    </div>
+                  <div class="price-summary">
+                    <span class="summary-days">
+                      {{ getDays() }} {{ getDays() === 1 ? 'day' : 'days' }}
+                      × ₸{{ equipment.daily_rate | number:'1.0-0' }}
+                    </span>
+                    <span class="summary-total">₸{{ getTotal() | number:'1.0-0' }}</span>
                   </div>
                 }
 
-                <!-- Status messages -->
                 @if (availabilityMessage) {
-                  <div [class]="isAvailable
-                    ? 'flex items-center gap-2 text-[11px] tracking-label uppercase text-emerald-600 mb-4'
-                    : 'flex items-center gap-2 text-[11px] tracking-label uppercase text-red-500 mb-4'">
-                    <span [class]="isAvailable ? 'w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0' : 'w-1.5 h-1.5 rounded-full bg-red-400 flex-shrink-0'"></span>
+                  <div class="status-msg" [class.success]="isAvailable" [class.error]="!isAvailable">
+                    <span class="dot" [class.dot-green]="isAvailable" [class.dot-red]="!isAvailable"></span>
                     {{ availabilityMessage }}
                   </div>
                 }
 
                 @if (bookingMessage) {
-                  <div [class]="bookingSuccess
-                    ? 'flex items-center gap-2 text-[11px] tracking-label uppercase text-emerald-600 mb-4'
-                    : 'flex items-center gap-2 text-[11px] tracking-label uppercase text-red-500 mb-4'">
-                    <span [class]="bookingSuccess ? 'w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0' : 'w-1.5 h-1.5 rounded-full bg-red-400 flex-shrink-0'"></span>
+                  <div class="status-msg" [class.success]="bookingSuccess" [class.error]="!bookingSuccess">
+                    <span class="dot" [class.dot-green]="bookingSuccess" [class.dot-red]="!bookingSuccess"></span>
                     {{ bookingMessage }}
                   </div>
                 }
 
-                <!-- Action buttons -->
-                <div class="space-y-2">
-                  <button
-                    (click)="checkAvailability()"
-                    [disabled]="!startDate || !endDate || checkingAvailability"
-                    class="w-full py-3.5 text-[11px] tracking-brand uppercase font-medium
-                           border border-black hover:bg-black hover:text-white transition-colors
-                           disabled:border-gray-200 disabled:text-gray-300 disabled:cursor-not-allowed">
+                <div class="action-buttons">
+                  <button (click)="checkAvailability()"
+                          [disabled]="!startDate || !endDate || checkingAvailability"
+                          class="btn btn-outline">
                     {{ checkingAvailability ? 'Checking...' : 'Check Availability' }}
                   </button>
-
-                  <button
-                    (click)="bookEquipment()"
-                    [disabled]="!startDate || !endDate || booking || !equipment.is_available"
-                    class="w-full py-3.5 text-[11px] tracking-brand uppercase font-medium
-                           bg-black text-white hover:bg-gray-900 transition-colors
-                           disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-not-allowed">
+                  <button (click)="bookEquipment()"
+                          [disabled]="!startDate || !endDate || booking || !equipment.is_available"
+                          class="btn btn-primary">
                     {{ booking ? 'Booking...' : (authService.isAuthenticated() ? 'Book Now' : 'Sign In to Book') }}
                   </button>
                 </div>
 
                 @if (!authService.isAuthenticated()) {
-                  <p class="mt-3 text-center text-[11px] text-gray-400">
-                    <a routerLink="/login" class="border-b border-gray-300 hover:border-black hover:text-black transition-colors pb-0.5">Sign in</a>
-                    &nbsp;to make a booking
+                  <p class="signin-hint">
+                    <a routerLink="/login">Sign in</a> to make a booking
                   </p>
                 }
               </div>
@@ -240,9 +205,7 @@ export class EquipmentDetailComponent implements OnInit {
     }).subscribe({
       next: (res) => {
         this.isAvailable = res.available;
-        this.availabilityMessage = res.available
-          ? 'Available for selected dates'
-          : 'Not available for selected dates';
+        this.availabilityMessage = res.available ? 'Available for selected dates' : 'Not available for selected dates';
         this.checkingAvailability = false;
       },
       error: (err) => {
@@ -270,9 +233,7 @@ export class EquipmentDetailComponent implements OnInit {
       },
       error: (err) => {
         this.bookingSuccess = false;
-        this.bookingMessage = err.error?.non_field_errors?.[0]
-          || err.error?.detail
-          || 'Booking failed — please try again';
+        this.bookingMessage = err.error?.non_field_errors?.[0] || err.error?.detail || 'Booking failed — please try again';
         this.booking = false;
       },
     });

@@ -8,71 +8,59 @@ import { AuthService } from '../../../core/services/auth.service';
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
+  styleUrls: ['./login.component.css'],
   template: `
-    <div class="min-h-screen bg-white flex">
-      <!-- Left decorative panel -->
-      <div class="hidden lg:block lg:w-1/2 bg-black relative overflow-hidden">
-        <div class="absolute inset-0 flex flex-col items-start justify-end p-16">
-          <p class="text-white/30 text-[10px] tracking-brand uppercase mb-4">Gear Rental</p>
-          <h2 class="text-white text-5xl font-bold uppercase leading-none tracking-tight">
-            Professional<br/>Equipment<br/>Rental
-          </h2>
-          <p class="text-white/40 text-sm mt-6 max-w-xs leading-relaxed">
-            Cameras, lenses, lighting and more — available by the day.
-          </p>
+    <div class="auth-page">
+      <div class="auth-panel">
+        <div class="auth-panel-inner">
+          <p class="label">Gear Rental</p>
+          <h2 class="auth-panel-title">Professional<br/>Equipment<br/>Rental</h2>
+          <p class="auth-panel-desc">Cameras, lenses, lighting and more — available by the day.</p>
         </div>
       </div>
 
-      <!-- Right form panel -->
-      <div class="w-full lg:w-1/2 flex items-center justify-center px-8 py-16">
-        <div class="w-full max-w-sm">
-          <div class="mb-10">
-            <p class="text-[10px] tracking-brand uppercase text-gray-400 mb-2">Account</p>
-            <h1 class="text-3xl font-bold uppercase tracking-tight">Sign In</h1>
+      <div class="auth-form-wrap">
+        <div class="auth-form-inner">
+          <div class="auth-heading">
+            <p class="label">Account</p>
+            <h1 class="auth-title">Sign In</h1>
           </div>
 
-          <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)" novalidate class="space-y-6">
-            <div>
-              <label class="block text-[10px] tracking-label uppercase text-gray-400 mb-2">Username</label>
-              <input id="username" type="text" name="username"
+          <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)" novalidate>
+            <div class="form-group">
+              <label class="form-label">Username</label>
+              <input type="text" name="username"
                      [(ngModel)]="credentials.username" required #usernameField="ngModel"
-                     class="w-full border-b border-gray-300 focus:border-black outline-none py-2 text-sm bg-transparent placeholder:text-gray-300"
-                     placeholder="your_username" />
+                     class="form-input" placeholder="your_username" />
               @if (usernameField.invalid && loginForm.submitted) {
-                <p class="mt-1 text-[11px] tracking-label uppercase text-red-500">Required</p>
+                <p class="form-error">Required</p>
               }
             </div>
 
-            <div>
-              <label class="block text-[10px] tracking-label uppercase text-gray-400 mb-2">Password</label>
-              <input id="password" type="password" name="password"
+            <div class="form-group">
+              <label class="form-label">Password</label>
+              <input type="password" name="password"
                      [(ngModel)]="credentials.password" required minlength="6" #passwordField="ngModel"
-                     class="w-full border-b border-gray-300 focus:border-black outline-none py-2 text-sm bg-transparent placeholder:text-gray-300"
-                     placeholder="••••••••" />
+                     class="form-input" placeholder="••••••••" />
               @if (passwordField.invalid && loginForm.submitted) {
-                <p class="mt-1 text-[11px] tracking-label uppercase text-red-500">
+                <p class="form-error">
                   {{ passwordField.errors?.['required'] ? 'Required' : 'Min 6 characters' }}
                 </p>
               }
             </div>
 
             @if (serverError) {
-              <p class="text-[11px] tracking-label uppercase text-red-500">{{ serverError }}</p>
+              <p class="form-error" style="margin-bottom:1rem">{{ serverError }}</p>
             }
 
-            <button type="submit" [disabled]="loading"
-                    class="w-full py-4 text-[12px] tracking-brand uppercase font-medium
-                           bg-black text-white hover:bg-gray-900 transition-colors
-                           disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-not-allowed mt-4">
+            <button type="submit" [disabled]="loading" class="btn btn-primary submit-btn">
               {{ loading ? 'Signing in...' : 'Sign In' }}
             </button>
           </form>
 
-          <p class="mt-8 text-xs text-gray-400">
+          <p class="auth-footer">
             No account?
-            <a routerLink="/register" class="text-black border-b border-black pb-0.5 hover:opacity-50 transition-opacity ml-1">
-              Register
-            </a>
+            <a routerLink="/register" class="auth-link">Register</a>
           </p>
         </div>
       </div>

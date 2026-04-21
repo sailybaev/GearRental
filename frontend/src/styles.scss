@@ -1,43 +1,145 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Reset */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+a { text-decoration: none; color: inherit; }
+button { font-family: inherit; cursor: pointer; }
+input { font-family: inherit; }
+img { display: block; }
+table { border-collapse: collapse; width: 100%; }
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 4%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 4%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 4%;
-    --primary: 0 0% 4%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 4%;
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 45%;
-    --accent: 0 0% 96%;
-    --accent-foreground: 0 0% 4%;
-    --destructive: 0 72% 51%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 88%;
-    --input: 0 0% 88%;
-    --ring: 0 0% 4%;
-    --radius: 0rem;
-  }
+body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background: #fff;
+  color: #0a0a0a;
 }
 
-@layer base {
-  * { @apply border-border; }
-  body {
-    @apply bg-background text-foreground;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-  }
-  h1, h2, h3, h4 { letter-spacing: -0.02em; }
+h1, h2, h3, h4 { letter-spacing: -0.02em; }
+
+/* Animations */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
 }
 
-@layer utilities {
-  .tracking-brand { letter-spacing: 0.12em; }
-  .tracking-label { letter-spacing: 0.08em; }
+/* Layout */
+.container {
+  max-width: 1536px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
 }
+
+.container-xl {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Typography */
+.label {
+  font-size: 0.625rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #9ca3af;
+}
+
+.label-sm {
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Form */
+.form-group { margin-bottom: 1.5rem; }
+
+.form-label {
+  display: block;
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9ca3af;
+  margin-bottom: 0.5rem;
+}
+
+.form-input {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #d1d5db;
+  outline: none;
+  padding: 0.5rem 0;
+  font-size: 0.875rem;
+  background: transparent;
+  color: #0a0a0a;
+  transition: border-color 0.15s;
+}
+.form-input:focus { border-bottom-color: #0a0a0a; }
+.form-input::placeholder { color: #d1d5db; }
+
+.form-input-sm {
+  width: 5rem;
+  border: none;
+  border-bottom: 1px solid #d1d5db;
+  outline: none;
+  padding: 0.25rem 0.25rem;
+  font-size: 0.6875rem;
+  background: transparent;
+  color: #0a0a0a;
+  transition: border-color 0.15s;
+}
+.form-input-sm:focus { border-bottom-color: #0a0a0a; }
+.form-input-sm::placeholder { color: #d1d5db; }
+
+.form-error {
+  margin-top: 0.25rem;
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #ef4444;
+}
+
+/* Buttons */
+.btn {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 500;
+  border: none;
+  transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+}
+.btn:disabled { cursor: not-allowed; }
+
+.btn-primary { background: #0a0a0a; color: #fff; }
+.btn-primary:hover:not(:disabled) { background: #1f1f1f; }
+.btn-primary:disabled { background: #f3f4f6; color: #d1d5db; }
+
+.btn-outline { background: transparent; color: #0a0a0a; border: 1px solid #0a0a0a; }
+.btn-outline:hover:not(:disabled) { background: #0a0a0a; color: #fff; }
+.btn-outline:disabled { border-color: #e5e7eb; color: #d1d5db; }
+
+/* Skeleton */
+.skeleton { background: #f3f4f6; animation: pulse 2s ease-in-out infinite; }
+
+/* Status */
+.status { font-size: 0.625rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.status-confirmed { color: #16a34a; }
+.status-pending { color: #ca8a04; }
+.status-cancelled { color: #d1d5db; }
+
+/* Dot */
+.dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 6px; }
+.dot-green { background: #10b981; }
+.dot-red { background: #f87171; }
+.dot-gray { background: #d1d5db; }
+
+/* Availability indicator */
+.avail-indicator {
+  display: flex;
+  align-items: center;
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.avail-indicator.available { color: #059669; }
+.avail-indicator.unavailable { color: #d1d5db; }

@@ -1,0 +1,36 @@
+.not-found {
+  min-height: 100vh;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.not-found-code {
+  font-size: 8rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: #f3f4f6;
+  user-select: none;
+}
+
+.not-found-msg {
+  font-size: 0.875rem;
+  color: #9ca3af;
+  margin: 0.5rem 0 2rem;
+}
+
+.back-link {
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border-bottom: 1px solid #0a0a0a;
+  padding-bottom: 2px;
+  transition: opacity 0.15s;
+}
+
+.back-link:hover {
+  opacity: 0.5;
+}

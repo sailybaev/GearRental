@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    { "name": "mypy_django_plugin.main" }
+  ],
+  "djangoSettingsModule": "core.settings"
+}
